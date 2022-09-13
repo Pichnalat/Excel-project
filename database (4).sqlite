@@ -1,0 +1,64 @@
+/*European Soccer Database Seasons 2008 to 2016*/
+
+--Goalkepper stat VS Overall stat(Done)
+SELECT a.player_name,b.gk_diving,b.gk_handling,gk_kicking,gk_positioning,gk_reflexes,b.overall_rating
+,SUM(gk_diving+gk_handling+gk_kicking+gk_positioning+gk_reflexes)/(5*count(player_name)) As OverallGooalkeepingSkill
+from Player a,Player_Attributes b
+where a.player_api_id = b.player_api_id 
+Group by player_name
+order by OverallGooalkeepingSkill desc
+                                                                   
+
+SELECT a.player_name,b.gk_diving,b.gk_handling,gk_kicking,gk_positioning,gk_reflexes,b.long_passing,b.overall_rating
+,SUM(gk_diving+gk_handling+gk_kicking+gk_positioning+gk_reflexes+long_passing)/(6*count(player_name)) As OverallGooalkeepingSkill
+from Player a,Player_Attributes b
+where a.player_api_id = b.player_api_id 
+Group by player_name
+order by OverallGooalkeepingSkill desc
+
+
+
+
+--Player finishing
+with abc as 
+(
+SELECT a.player_name, b.finishing 
+  ,avg(b.finishing) OVER (Partition by b.finishing order by a.player_name) as AverageFinishing
+
+from Player a,Player_Attributes b
+where a.player_api_id = b.player_api_id
+GROUP by a.player_name
+order by b.finishing desc
+ )
+
+ 
+ 
+ 
+ --test
+ with abc as 
+(
+SELECT a.player_name,b.date, b.finishing ,avg(b.finishing) OVER (Partition by b.finishing order by a.player_name) as test
+from Player a,Player_Attributes b
+where a.player_api_id = b.player_api_id
+GROUP by a.player_name
+order by b.finishing desc
+ )
+ Select * 
+ from abc
+ where finishing <> AverageFinishing 
+ 
+ 
+ --Height vs Speed
+ 
+ --Team create shooting
+ Select a.team_long_name,b.chancecreationshooting,sum(b.chancecreationshooting)/count(team_long_name)
+ from Team a
+ JOIN Team_Attributes b
+ ON a.team_api_id = b.team_api_id
+ Group BY a.team_long_name
+ order by b.chancecreationshooting desc
+ 
+ 
+ 
+ 
+ 
