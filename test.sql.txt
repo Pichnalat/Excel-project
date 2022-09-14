@@ -1,5 +1,0 @@
-SELECT a.player_name,b.finishing
-
-from Player a,Player_Attributes b
-where a.player_api_id = b.player_api_id
-order by b.finishing desc; 
